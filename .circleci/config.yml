@@ -76,6 +76,7 @@ jobs:
       - run:
           name: Front-end test
           command: |
+             cd frontend
              npm run test
           
   test-backend:
@@ -88,7 +89,8 @@ jobs:
       - run:
           name: Back-end test
           command: |
-             npm run test
+            cd backend
+            npm run test
             
   scan-frontend:
     docker:
@@ -100,7 +102,8 @@ jobs:
       - run:
           name: Front-end scan
           command: |
-             npm audit
+            cd frontend
+            npm audit
 
   scan-backend:
     docker:
@@ -112,6 +115,7 @@ jobs:
       - run:
           name: Back-end scan
           command: |
+             cd backend
              npm audit
 
   deploy-infrastructure:
