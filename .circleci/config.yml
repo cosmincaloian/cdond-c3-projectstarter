@@ -247,7 +247,7 @@ jobs:
 
   cloudfront-update:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
@@ -262,7 +262,7 @@ jobs:
 
 cleanup:
     docker:
-      # Docker image here
+      - image: alpine:latest
     steps:
       - checkout
       - run:
