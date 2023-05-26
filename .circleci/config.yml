@@ -43,6 +43,7 @@ jobs:
       - run:
           name: Build front-end
           command: |
+            cd backend
             npm install 
       - save_cache:
           paths: [frontend/node_modules]
@@ -58,7 +59,9 @@ jobs:
       - run:
           name: Back-end build
           command: |
-             npm login && npm install
+             cd frontend
+             npm login
+             npm install
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
