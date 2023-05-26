@@ -60,7 +60,6 @@ jobs:
           name: Back-end build
           command: |
              cd frontend
-             npm login
              npm install
       - save_cache:
           paths: [backend/node_modules]
