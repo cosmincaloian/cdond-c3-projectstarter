@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.1
+jobs:
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -33,6 +36,26 @@ commands:
             fi
             
 jobs:
+  notify:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: fail
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -272,24 +295,24 @@ jobs:
             # your code here
       # Here's where you will add some code to rollback on failure  
 
-cleanup:
-    docker:
-      - image: alpine:latest
-    steps:
-      - checkout
-      - run:
-          name: Get old stack workflow id
-          command: |
-            # your code here
-            export OldWorkflowID="the id here"
-            export STACKS=[] #put the list of stacks here
-      - run:
-          name: Remove old stacks and files
-          command: |
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-            then
+  cleanup:
+      docker:
+        - image: alpine:latest
+      steps:
+        - checkout
+        - run:
+            name: Get old stack workflow id
+            command: |
               # your code here
-            fi
+              export OldWorkflowID="the id here"
+              export STACKS=[] #put the list of stacks here
+        - run:
+            name: Remove old stacks and files
+            command: |
+              if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+              then
+                # your code here
+              fi
             
 
 workflows:
@@ -324,3 +347,5 @@ workflows:
           requires: [smoke-test]
       - cleanup:
           requires: [cloudfront-update]
+      - notify:
+          context: slack-secrets
