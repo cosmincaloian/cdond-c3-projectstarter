@@ -196,8 +196,6 @@ jobs:
 
       - destroy-environment:
           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          when: on_fail
 
   deploy-frontend:
     docker:
