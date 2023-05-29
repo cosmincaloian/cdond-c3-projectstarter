@@ -82,7 +82,8 @@ jobs:
              cd frontend
              npm install
              npm run test
-          
+      - slack/notify:
+          event: fail          
   test-backend:
     docker:
       - image: circleci/node:13.8.0
