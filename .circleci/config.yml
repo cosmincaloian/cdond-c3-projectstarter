@@ -154,7 +154,8 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure      
+      - destroy-environment:
+          event: fail
 
   configure-infrastructure:
     docker:
@@ -173,8 +174,8 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i ./ansible/inventory.txt ./ansible/configure-server.yml
-
-      # Here's where you will add some code to rollback on failure      
+      - destroy-environment:
+          event: fail
 
   run-migrations:
     docker:
@@ -191,7 +192,8 @@ jobs:
           command: |
             # Your code here
             exit 1
-     # Here's where you will add some code to rollback on failure      
+      - revert-migrations:
+          event: fail
 
   deploy-frontend:
     docker:
@@ -212,8 +214,9 @@ jobs:
           name: Deploy frontend objects
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure      
-                    
+
+      - destroy-environment:
+          event: fail                    
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
@@ -231,8 +234,9 @@ jobs:
           name: Deploy backend
           command: |
             ansible-playbook -i ./ansible/inventory.txt ./ansible/deploy-backend.yml
-      # Here's where you will add some code to rollback on failure  
 
+      - destroy-environment:
+          event: fail
   smoke-test:
     docker:
       - image: alpine:latest
@@ -256,8 +260,9 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure  
 
+      - destroy-environment:
+          event: fail
   cloudfront-update:
     docker:
       - image: amazon/aws-cli
