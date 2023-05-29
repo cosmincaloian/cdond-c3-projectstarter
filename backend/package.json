@@ -32,7 +32,6 @@
     "update:domain": "npm update @kiwihr/kiwi-domain"
   },
   "dependencies": {
-    "minimist": "^1.2.8",
     "@hapi/joi": "^17.1.1",
     "@nestjs/common": "^6.11.11",
     "@nestjs/core": "^6.11.11",
@@ -68,6 +67,7 @@
     "winston-slack-webhook": "^0.1.6"
   },
   "devDependencies": {
+    "minimist": "^1.2.8",
     "@nestjs/testing": "^6.11.11",
     "@types/express": "^4.17.3",
     "@types/jest": "^24.9.1",
