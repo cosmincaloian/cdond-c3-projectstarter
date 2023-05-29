@@ -155,7 +155,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment:
-          event: fail
+          when: on_fail
 
   configure-infrastructure:
     docker:
@@ -163,7 +163,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX"] 
+          fingerprints: ["73:2a:d9:a4:5c:50:f3:00:50:c5:dd:87:36:69:70:db"] 
       - attach_workspace:
           at: ~/
       - run:
@@ -175,7 +175,7 @@ jobs:
           command: |
             ansible-playbook -i ./ansible/inventory.txt ./ansible/configure-server.yml
       - destroy-environment:
-          event: fail
+          when: on_fail
 
   run-migrations:
     docker:
@@ -193,7 +193,7 @@ jobs:
             # Your code here
             exit 1
       - revert-migrations:
-          event: fail
+          when: on_fail
 
   deploy-frontend:
     docker:
@@ -216,7 +216,7 @@ jobs:
             # your code here
 
       - destroy-environment:
-          event: fail                    
+          when: on_fail
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
@@ -236,7 +236,7 @@ jobs:
             ansible-playbook -i ./ansible/inventory.txt ./ansible/deploy-backend.yml
 
       - destroy-environment:
-          event: fail
+          when: on_fail
   smoke-test:
     docker:
       - image: alpine:latest
@@ -262,7 +262,7 @@ jobs:
             # your code here
 
       - destroy-environment:
-          event: fail
+          when: on_fail
   cloudfront-update:
     docker:
       - image: amazon/aws-cli
