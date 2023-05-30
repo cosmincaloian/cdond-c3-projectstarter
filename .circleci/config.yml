@@ -125,8 +125,6 @@ jobs:
              cd backend
              npm install
              npm audit --audit-level=critical || true
-      - slack/notify:
-          event: fail
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -313,7 +311,6 @@ workflows:
           requires: [build-backend]
       - scan-backend:
           requires: [build-backend]
-          context: slack
       - scan-frontend:
           requires: [build-frontend]
       - deploy-infrastructure:
