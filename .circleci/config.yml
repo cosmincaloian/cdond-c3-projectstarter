@@ -200,7 +200,12 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update --no-cache ansible tar gzip curl
-      - awscli_install
+      - run:
+          name: Install AWS CLI v2
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
+            unzip awscli.zip
+            ./aws/install
       - run:
           name: Configure server
           command: |
@@ -218,7 +223,12 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt install -y tar gzip curl
-      - awscli_install
+      - run:
+          name: Install AWS CLI v2
+          command: |
+            sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
+            unzip awscli.zip
+            sudo ./aws/install
       - run:
           name: Run migrations
           command: |
@@ -289,7 +299,12 @@ jobs:
             apk add --update --no-cache nodejs
             apk add --update --no-cache npm
             apk add --update --no-cache curl      
-      - awscli_install
+      - run:
+          name: Install AWS CLI v2
+          command: |
+            sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
+            unzip awscli.zip
+            sudo ./aws/install
       - run:
           name: Deploy backend
           command: |
@@ -312,7 +327,6 @@ jobs:
       - image: alpine:latest
     steps:
       - checkout
-      - awscli_install
       - run:
           name: Install dependencies
           command: |
