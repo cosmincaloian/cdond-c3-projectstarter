@@ -328,23 +328,45 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update curl
+            apk add --update --no-cache nodejs
+            apk add --update --no-cache npm
+            apk add --update --no-cache curl  
       - run:
-          name: Get backend url
+          name: Install AWS CLI v2
           command: |
-            # your code here
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
+            sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
+            unzip awscli.zip
+            sudo ./aws/install
       - run:
           name: Backend smoke test.
           command: |
-            # your code here
+            export BACKEND_IP=$(aws ec2 describe-instances \
+            --query "Reservations[*].Instances[*].[PublicIpAddress]" \
+            --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            if curl "${API_URL}/api/status" | grep "ok"
+            then
+              return 0
+            else
+  	          return 1
+            fi
       - run:
           name: Frontend smoke test.
           command: |
-            # your code here
-
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+            then
+	            # Change this to 0 after the job fails
+              return 1
+            else
+              return 1
+            fi
       - destroy-environment:
+          WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
   cloudfront-update:
     docker:
