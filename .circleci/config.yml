@@ -149,14 +149,11 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            # Your code here
             exit 1
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy-environment:
-          WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
 
   configure-infrastructure:
     docker:
@@ -164,7 +161,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["73:2a:d9:a4:5c:50:f3:00:50:c5:dd:87:36:69:70:db"] 
+          fingerprints: ["6e:ae:f0:3b:53:a4:f7:4e:29:aa:ba:6f:2f:ee:fe:22"] 
       - attach_workspace:
           at: ~/
       - run:
