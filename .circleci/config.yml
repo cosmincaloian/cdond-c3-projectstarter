@@ -34,14 +34,12 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
+				    SUCCESS=$(curl --insecure  https://kvdb.io/RpmAMzUhzuo94XLvtU5CtJ/migration_<< parameters.WorkFlowId >>)
             if(( $SUCCESS==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
+              cd ~/project/backend
+              npm install
+					    npm run migration:revert
             fi
             
 jobs:
@@ -249,8 +247,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -259,6 +255,8 @@ jobs:
             apk add --update --no-cache nodejs
             apk add --update --no-cache npm
             apk add --update --no-cache curl 
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get backend url
           command: |
@@ -289,8 +287,6 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["35:de:83:cf:08:70:e2:a9:75:ce:bf:d5:35:3f:85:be"] 
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -299,6 +295,8 @@ jobs:
             apk add --update --no-cache nodejs
             apk add --update --no-cache npm
             apk add --update --no-cache curl      
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install AWS CLI v2
           command: |
