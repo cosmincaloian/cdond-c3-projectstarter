@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  slack: circleci/slack@4.12.5
+  ms-teams: cloudradar-monitoring/ms-teams@1.0.0
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -108,8 +108,10 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm audit --audit-level=critical || true
-
+            npm audit --audit-level=critical
+      - ms-teams/report:
+          only_on_fail: true
+          webhook_url: $MS_TEAMS_WEBHOOK_URL
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
