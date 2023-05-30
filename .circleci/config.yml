@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  ms-teams: cloudradar-monitoring/ms-teams@1.0.0
+  ms-teams-notifier: oktapodia/ms-teams-notifier@3.0.0
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -109,7 +109,7 @@ jobs:
             cd frontend
             npm install
             npm audit --audit-level=critical
-      - ms-teams/report:
+      - ms-teams-notifier/report:
           only_on_fail: true
           webhook_url: $MS_TEAMS_WEBHOOK_URL
   scan-backend:
