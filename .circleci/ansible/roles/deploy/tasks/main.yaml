@@ -1,0 +1,20 @@
+---
+- name: "Extract artifact"
+  unarchive:
+    src: artifact.tar.gz
+    dest: ~/backend
+
+- name: "Install node_modules"
+  shell: |
+    cd ~/backend
+    npm i
+
+- name: "Stop app"
+  shell: |
+    cd ~/backend
+    pm2 stop default 
+
+- name: "Stop app"
+  shell: |
+    cd ~/backend
+    pm2 start npm -- start
