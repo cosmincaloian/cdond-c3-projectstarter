@@ -337,9 +337,9 @@ jobs:
       - run:
           name: Install AWS CLI v2
           command: |
-            sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
             unzip awscli.zip
-            sudo ./aws/install
+            ./aws/install
       - run:
           name: Backend smoke test.
           command: |
