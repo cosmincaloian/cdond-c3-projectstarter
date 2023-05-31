@@ -9,16 +9,8 @@
   shell: |
     npm i
 
-- name: "List app"
-  shell: |
-    pm2 list
-
 - name: start app
   become: yes
   shell: |
     pm2 stop all
     pm2 start npm -- start
-
-- name: "List app after"
-  shell: |
-    pm2 list
