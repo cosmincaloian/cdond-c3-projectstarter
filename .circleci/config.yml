@@ -325,21 +325,12 @@ jobs:
           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
   smoke-test:
     docker:
-      - image: alpine:latest
+      - image: amazon/aws-cli
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update --no-cache curl  
+      - run: yum install curl -y
       - attach_workspace:
           at: ~/
-      - run:
-          name: Install AWS CLI v2
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
-            unzip awscli.zip
-            ./aws/install
       - run:
           name: Backend smoke test.
           command: |
