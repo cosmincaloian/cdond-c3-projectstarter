@@ -27,8 +27,8 @@
 
 - name: "Start app"
   shell: |
-    cd ~/backend
-    pm2 start npm -- start
+    cd ~/backend/dist
+    pm2 start main.js -- start
 
 - name: "List app after"
   shell: |
