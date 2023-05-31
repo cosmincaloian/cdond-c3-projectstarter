@@ -18,9 +18,9 @@
 - name: "Stop app"
   shell: |
     cd ~/backend
-    pm2 stop default 
+    pm2 stop default || true
 
-- name: "Stop app"
+- name: "Start app"
   shell: |
     cd ~/backend
     pm2 start npm -- start
