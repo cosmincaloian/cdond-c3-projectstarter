@@ -1,9 +1,5 @@
 ---
 
-- name: Creates directory 
-  file:
-    state: directory
-
 - name: "Extract artifact"
   unarchive:
     src: ~/project/artifact.tar.gz
