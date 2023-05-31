@@ -1,7 +1,7 @@
 ---
 - name: "Extract artifact"
   unarchive:
-    src: artifact.tar.gz
+    src: ~/project/artifact.tar.gz
     dest: ~/backend
 
 - name: "Install node_modules"
