@@ -2,35 +2,27 @@
 
 - name: Creates directory 
   file:
-    path: ~/backend
     state: directory
 
 - name: "Extract artifact"
   unarchive:
     src: ~/project/artifact.tar.gz
-    dest: ~/backend
+    dest: .
 
 - name: "Install node_modules"
   shell: |
-    cd ~/backend
     npm i
-
-- name: "Stop app"
-  shell: |
-    cd ~/backend
-    pm2 stop default || true
 
 - name: "List app"
   shell: |
-    cd ~/backend
     pm2 list
 
-- name: "Start app"
+- name: start app
+  become: yes
   shell: |
-    cd ~/backend/dist
-    pm2 start main.js -- start
+    pm2 stop all
+    pm2 start npm -- start
 
 - name: "List app after"
   shell: |
-    cd ~/backend
     pm2 list
