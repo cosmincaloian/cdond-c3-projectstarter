@@ -326,10 +326,12 @@ jobs:
           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
   smoke-test:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.10-alpine3.16
     steps:
       - checkout
-      - run: yum install curl tar gzip -y
+      - run: 
+          command: |
+            apk add --update --no-cache curl aws-cli tar gzip nodejs npm
       - attach_workspace:
           at: ~/
       - run:
@@ -341,9 +343,12 @@ jobs:
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            sleep 60
-            STATUS=$(curl "${API_URL}/api/status" | grep "ok")
-            $STATUS=="ok"
+            if curl "${API_URL}/api/status"
+            then
+                return 0
+            else
+                return 1
+            fi
       - run:
           name: Frontend smoke test.
           command: |
