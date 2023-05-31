@@ -1,4 +1,10 @@
 ---
+
+- name: Creates directory 
+  file:
+    path: ~/backend
+    state: directory
+
 - name: "Extract artifact"
   unarchive:
     src: ~/project/artifact.tar.gz
