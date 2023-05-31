@@ -331,9 +331,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update --no-cache nodejs
-            apk add --update --no-cache npm
             apk add --update --no-cache curl  
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install AWS CLI v2
           command: |
