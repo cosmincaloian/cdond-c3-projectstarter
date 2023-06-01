@@ -360,10 +360,10 @@ jobs:
             else
               exit 1
             fi
-#       - destroy-environment:
-#           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
-#       - revert-migrations:
-#           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
   cloudfront-update:
     docker:
       - image: amazon/aws-cli
@@ -376,9 +376,15 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
-            # your code here
-      # Here's where you will add some code to rollback on failure  
-
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name InitialStack \
+            --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID:0:7} \
+            --tags project=udapeople
+      - destroy-environment:
+          WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
   cleanup:
       docker:
         - image: alpine:latest
