@@ -331,7 +331,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run: yum install curl tar gzip -y
+      - run: yum install curl tar gzip nodejs npm -y
       - attach_workspace:
           at: ~/
       - run:
@@ -371,10 +371,9 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            # your code here
+      - run: yum install tar gzip nodejs npm -y
+      - attach_workspace:
+          at: ~/
       - run:
           name: Update cloudfront distribution
           command: |
