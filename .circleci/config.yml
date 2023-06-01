@@ -35,9 +35,14 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            cd ~/project/backend
-            npm install
-            npm run migration:revert
+            SUCCESS=$(curl --insecure  https://kvdb.io/RpmAMzUhzuo94XLvtU5CtJ/migration_<< parameters.WorkFlowId >>)
+            echo $SUCCESS
+            if(( $SUCCESS==1 )); 
+            then
+              cd ~/project/backend
+              npm install
+              npm run migration:revert
+            fi
             
 jobs:
   build-frontend:
@@ -181,7 +186,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - revert-migrations:
+      - destroy-environment:
           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
   configure-infrastructure:
     docker:
@@ -222,6 +227,7 @@ jobs:
       - run:
           name: Install AWS CLI v2
           command: |
+            exit 1
             sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
             unzip awscli.zip
             sudo ./aws/install
@@ -239,7 +245,7 @@ jobs:
             then
               curl --insecure https://kvdb.io/RpmAMzUhzuo94XLvtU5CtJ/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
-      - destroy-environment:
+      - revert-migrations:
           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
   deploy-frontend:
     docker:
@@ -425,13 +431,13 @@ workflows:
 #           requires: [build-backend]
 #       - scan-frontend:
 #           requires: [build-frontend]
-      - deploy-infrastructure:
-#           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [test-feature-branch]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
+#       - deploy-infrastructure:
+# #           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+#           filters:
+#             branches:
+#               only: [test-feature-branch]
+#       - configure-infrastructure:
+#           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
       - deploy-frontend:
