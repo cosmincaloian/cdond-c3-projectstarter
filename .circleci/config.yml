@@ -387,7 +387,7 @@ jobs:
           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
   cleanup:
       docker:
-        - image: alpine:latest
+        - image: amazon/aws-cli
       steps:
         - checkout
         - run:
