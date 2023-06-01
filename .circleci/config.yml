@@ -226,7 +226,6 @@ jobs:
       - run:
           name: Install AWS CLI v2
           command: |
-            exit 1
             sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
             unzip awscli.zip
             sudo ./aws/install
