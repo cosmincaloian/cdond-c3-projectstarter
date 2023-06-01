@@ -181,7 +181,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy-environment:
+      - revert-migrations:
           WorkFlowId: ${CIRCLE_WORKFLOW_ID:0:7}
   configure-infrastructure:
     docker:
